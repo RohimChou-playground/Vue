@@ -5,14 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        div, button {
+            margin-bottom: 6px;
+        }
+    </style>
 </head>
 <body>
     <button id="mybtn1">HelloWorld</button>
-    <div id="mydiv1" class="{{ message }}">
+    <div id="mydiv1">
         {{ message }}
         <br/>
         {{ number1 * number2 }}
     </div>
+
+    <button id="mybtn2">Template</button>
+    <div id="mydiv2"></div>
+
+    <button id="mybtn3">Method</button>
+    <div id="mydiv3">{{ multiplyNumbers() }}</div>
+
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -26,6 +38,34 @@
                         }
                     }
             }).mount('#mydiv1');
+        });
+
+
+        document.querySelector('#mybtn2').addEventListener('click', () => {
+            Vue.createApp({
+                template: `{{ greeting }} 1111`,
+                data() {
+                        return {
+                            greeting: 'helloooooooooo',
+                        }
+                    }
+            }).mount('#mydiv2');
+        });
+
+        document.querySelector('#mybtn3').addEventListener('click', () => {
+            Vue.createApp({
+                data() {
+                    return {
+                        number1: 100,
+                        number2: 2
+                    }
+                },
+                methods: {
+                    multiplyNumbers() {
+                        return this.number1 * this.number2;
+                    }
+                }
+            }).mount('#mydiv3');
         });
     </script>
 </body>
