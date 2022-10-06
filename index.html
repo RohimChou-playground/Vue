@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="mybtn1">HelloWorld</button>
+    <div id="mydiv1" class="{{ message }}">
+        {{ message }}
+        <br/>
+        {{ number1 * number2 }}
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        document.querySelector('#mybtn1').addEventListener('click', () => {
+            Vue.createApp({
+                data() {
+                        return {
+                            message: 'Hello World',
+                            number1: 100,
+                            number2: 2
+                        }
+                    }
+            }).mount('#mydiv1');
+        });
+    </script>
+</body>
+</html>
