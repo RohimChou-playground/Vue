@@ -22,51 +22,181 @@
     <button id="mybtn2">Template</button>
     <div id="mydiv2"></div>
 
-    <button id="mybtn3">Method</button>
-    <div id="mydiv3">{{ multiplyNumbers() }}</div>
+    <button id="mybtn3">Method/Computed</button>
+    <div id="mydiv3">
+        如果有console.log，可以看出呼叫多次的話，computed只會被叫一次<br/>
+        而method會被呼叫多次<br/>
+        {{ multiplyNumbers() }}<br />
+        {{ multiplyNumbers() }}<br />
+        {{ multipledResult }}<br />
+        {{ multipledResult }}<br />
+    </div>
 
+    <button id="mybtn4">Model</button>
+    <div id="mydiv4">
+        <input type="text" v-model="message" />
+        <p>{{ message }}</p>
+        <label>lazy, change when focus out</label><br />
+        <input type="text" v-model.lazy="message" />
+    </div>
+
+    <button id="mybtn5">checkbox</button>
+    <div id="mydiv5">
+        <input type="checkbox" id="jack1" value="Jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+
+        <input type="checkbox" id="john1" value="John" v-model="checkedNames">
+        <label for="john">John</label>
+
+        <input type="checkbox" id="mike1" value="Mike" v-model="checkedNames">
+        <label for="mike">Mike</label>
+
+        <br>
+        <p>Checked names: {{ checkedNames }}</p>
+    </div>
+
+    <button id="mybtn6">v-modle.number</button> 
+    <div id="mydiv6">
+        還有model.trim 可以用<br />
+        <input type="text" v-model.number="num1" />+
+        <input type="text" v-model.number="num2" />+
+        <input type="text" v-model.number="num3" />
+        {{ num4 }}
+    </div>
+
+    <button id="mybtn7">v-text/v-html</button> 
+    <div id="mydiv7">
+        <div v-text="message"></div>
+        <div v-html="title"></div>
+    </div>
+
+    <button id="mybtn8">v-once</button> 
+    <div id="mydiv8">
+        <input type="text" v-model="message" /><br />
+        有v-once <span v-text="message" v-once></span><br />
+        沒v-once <span v-text="message"></span>
+    </div>
+
+    <button id="mybtn9">v-pre</button> 
+    <div id="mydiv9">
+        <div v-pre>{{ message }}</div>
+    </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-        document.querySelector('#mybtn1').addEventListener('click', () => {
-            Vue.createApp({
-                data() {
-                        return {
-                            message: 'Hello World',
-                            number1: 100,
-                            number2: 2
-                        }
-                    }
-            }).mount('#mydiv1');
-        });
-
-
-        document.querySelector('#mybtn2').addEventListener('click', () => {
-            Vue.createApp({
-                template: `{{ greeting }} 1111`,
-                data() {
-                        return {
-                            greeting: 'helloooooooooo',
-                        }
-                    }
-            }).mount('#mydiv2');
-        });
-
-        document.querySelector('#mybtn3').addEventListener('click', () => {
-            Vue.createApp({
-                data() {
+    document.querySelector('#mybtn1').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
                     return {
+                        message: 'Hello World',
                         number1: 100,
                         number2: 2
                     }
-                },
-                methods: {
-                    multiplyNumbers() {
-                        return this.number1 * this.number2;
+                }
+        }).mount('#mydiv1');
+    });
+
+
+    document.querySelector('#mybtn2').addEventListener('click', () => {
+        Vue.createApp({
+            template: `{{ greeting }} 1111`,
+            data() {
+                    return {
+                        greeting: 'helloooooooooo',
                     }
                 }
-            }).mount('#mydiv3');
-        });
+        }).mount('#mydiv2');
+    });
+
+    document.querySelector('#mybtn3').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    number1: 100,
+                    number2: 2
+                }
+            },
+            methods: {
+                multiplyNumbers() {
+                    return this.number1 * this.number2;
+                }
+            },
+            computed: {
+                multipledResult: function() {
+                    return this.number1 * this.number2;
+                }
+            }
+        }).mount('#mydiv3');
+    });
+
+
+    document.querySelector('#mybtn4').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello',
+                }
+            },
+        }).mount('#mydiv4');
+    });
+
+    document.querySelector('#mybtn5').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    checkedNames: [],
+                }
+            },
+        }).mount('#mydiv5');
+    });
+
+    document.querySelector('#mybtn6').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    num1: 0,
+                    num2: 0,
+                    num3: 0,
+                }
+            },
+            computed: {
+                num4: function() {
+                    return this.num1 + this.num2 + this.num3;
+                }
+            }
+        }).mount('#mydiv6');
+    });
+
+    document.querySelector('#mybtn7').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello',
+                    title: '<h3>Hello</h3>'
+                }
+            },
+        }).mount('#mydiv7');
+    });
+
+    document.querySelector('#mybtn8').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello',
+                }
+            },
+        }).mount('#mydiv8');
+    });
+
+    document.querySelector('#mybtn9').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello',
+                }
+            },
+        }).mount('#mydiv9');
+    });
     </script>
 </body>
 </html>

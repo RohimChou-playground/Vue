@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueRecursiveComponent</title>
+</head>
+
+<body>
+
+    <div id="vm1">
+        <h3 style="color:red">Props Recursive Component</h3>
+
+        <child-comp v-bind:title="menuData.name" v-bind:child="menuData.childNodes"></child-comp>
+    </div>
+
+</body>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+
+<script>
+
+    const menuData = {
+        name: '好書推薦',
+        childNodes: [{
+            name: 'Git',
+            url: null,
+            childNodes: [{
+                name: '為你自己學 Git',
+                url: 'https://www.tenlong.com.tw/products/9789864342662'
+            }]
+        },
+        {
+            name: '前端開發',
+            url: null,
+            childNodes: [{
+                name: '金魚都能懂的 CSS 選取器',
+                url: 'https://www.tenlong.com.tw/products/9789864344994'
+            },
+            {
+                name: '0 陷阱！0 誤解！8 天重新認識 JavaScript！',
+                url: 'https://www.tenlong.com.tw/products/9789864344130'
+            },
+            {
+                name: '讓 TypeScript 成為你全端開發的 ACE！',
+                url: 'https://www.tenlong.com.tw/products/9789864344895'
+            },
+            ]
+        },
+        {
+            name: 'IoT',
+            url: null,
+            childNodes: [{
+                name: 'IoT沒那麼難！新手用 JavaScript 入門做自己的玩具！',
+                url: 'https://www.tenlong.com.tw/products/9789864345328'
+            }]
+        },
+        {
+            name: 'Chatbot',
+            url: null,
+            childNodes: [{
+                name: '人人可作卡米狗：從零打造自己的 LINE 聊天機器人',
+                url: 'https://www.tenlong.com.tw/products/9789864342938'
+            }]
+        }
+        ]
+    };
+
+    //Props Object (Correct Version) 需先將物件屬型先解構成原始型別
+    const vm1 = Vue.createApp({
+        data() {
+            return {
+                menuData
+            }
+        },
+        components: {
+            'child-comp': {
+                name: 'child-comp',
+                props: {
+                    title: String,
+                    url: String,
+                    child: {
+                        type: Array,
+                        default: []
+                    }
+                },
+                data() {
+                    return {
+                        isOpen: false
+                    }
+                },
+                template: `
+                    <ul>
+                        <li>
+                            <template v-if="child.length > 0">
+                                <h2 v-bind:class="{ 'is-open': isOpen }" v-on:click="isOpen = !isOpen"> {{ title }} </h2>
+                                <child-comp v-show="isOpen" v-for="c in child" v-bind:title="c.name" v-bind:child="c.childNodes" v-bind:url="c.url"/>
+                            </template>
+                            <a v-bind:href="url" target="_blank" v-else>{{ title }}</a>
+                        </li>
+                    </ul>`
+            }
+        }
+    }).mount('#vm1');
+
+
+</script>
+
+
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div, button {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <button id="mybtn1">component</button>
+    <div id="mydiv1">
+        <span>子元件不應修改父元件的data (雖然可以做到)<br/></span>
+        
+        <span style="font-weight:bold"><br/>______錯誤範例______<br/></span>
+        <div v-for="book in books">{{ book.name }} / {{ book.author }}</div>
+        <comp-aaa v-for="book in books" v-bind:book-info="book"></comp-aaa>
+
+        <span style="font-weight:bold"><br/>______正確範例______ (:name是v-bind:name="XXX"的縮寫)<br/></span>
+        <comp-bbb v-for="book in books" :name="book.name" :author="book.author"></comp-bbb>
+        <span style="font-weight:bold"><br/>______如果真的要更新父元素，用event去通知父元件更新______遵循props down, events up<br/></span>
+        <span>v-on:mychildemit="parentUpdateVal"要放在父template的child component<br/></span>
+        <comp-ccc v-for="book in books" v-bind="book" v-on:mychildemit="parentUpdateVal"></comp-ccc>
+
+        <span style="font-weight:bold"><br/>______v-model語法糖______<br/></span>
+        <span>背後會分解成 v-bind跟v-on -> :message="message" @update:message="message = $event"<br/></span>
+        <span></span>孩子接的時候一定要叫modelValue<br/></span>
+        <span>父Message {{ message }}<br/></span>
+        <comp-ddd v-model="message"></comp-ddd>
+
+        <span style="font-weight:bold"><br/>______子子孫孫使用爺的資料______<br/></span>
+        <span>爺Component<br/></span>
+        <comp-eee></comp-eee>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        Vue.createApp({
+            methods: {
+                parentUpdateVal(val) {
+                    this.books[0].name = val;
+                }
+            },
+            components: {
+                'comp-aaa': {
+                    template: '<div> Child Component BookName <input type="text" v-model="bookInfo.name" /> </div>',
+                    props: {
+                        'bookInfo': { type: Object },
+                    }
+                },
+                'comp-bbb': {
+                    template: '<div> Child Component BookName <input type="text" v-model="name" /> </div>',
+                    props: {
+                        'name': { type: String },
+                        'author': { type: String },
+                    }
+                },
+                'comp-ccc': {
+                    template: `
+                        <div> [prop: {{ name }}] Child Component BookName 
+                            <input type="text" v-model="bookInfo.name"/> 
+                        </div>
+                    `,
+                    // @change="myInputChanged"
+                    props: {
+                        'name': { type: String },
+                        'author': { type: String },
+                    },
+                    data() {
+                        return {
+                            bookInfo: {
+                                name: this.name
+                            }
+                        }
+                    },
+                    methods: {
+                    },
+                    watch: {
+                        bookInfo: {
+                            deep: true, // 才能作物件深層更新偵測
+                            handler(val) {
+                                this.$emit('mychildemit', val.name);
+                            }
+                        }
+                    }
+                },
+                'comp-ddd': {
+                    template: `
+                        <div> <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" /> 
+                        </div>
+                    `,
+                    props: {
+                        'modelValue': { type: String },
+                    },
+                },
+                'comp-eee': {
+                    template: `
+                        <span>父Component<br/></span>
+                        <comp-fff></comp-fff>
+                    `,
+                    components: {
+                        'comp-fff': {
+                            template: `<span>孫Component {{ parentParentMsg }}<br/></span>`,
+                            inject: ['parentParentMsg']
+                        },
+                    },
+                },
+            },
+            provide() {
+                return {
+                    'parentParentMsg': '爺爺的訊息'
+                }
+            },
+            data() {
+                return {
+                    books: [
+                        { name: 'JavaScript', author: 'John' },
+                        { name: 'Java', author: 'Tim' },
+                    ],
+                    message: 'abc'
+                }
+            },
+            computed: {
+                // isValid() {
+                //     return this.message.length <= 5;
+                // },
+            }
+        }).mount('#mydiv1');
+    </script>
+</body>
+</html>

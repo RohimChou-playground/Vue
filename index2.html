@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div, button {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <button id="mybtn1">v-bind:style</button>
+    <div id="mydiv1">
+        超過五個字，會套用別的顏色<br/>
+        <input type="text" v-model.trim="message" v-bind:style="msgStyle" />
+    </div>
+
+    <button id="mybtn2">v-on</button>
+    <div id="mydiv2">
+        <a href="#" v-on:click="plus">Click Me</a>
+        <p>Count: {{ count }}</p>
+    </div>
+
+    <button id="mybtn3">v-if, v-else-if, v-else</button>
+    <div id="mydiv3">
+        <a href="#" v-on:click="plus">Click Me</a><br />
+        <a href="#" v-on:click="count = 0">Reset</a><br />
+        <span>Count: {{ count }}</span><br />
+        <div>
+            不能換行，要同一個位置 <br>
+            v-on:click="plus" 可縮寫為 @click="plus" <br>
+            <div v-if="count === 0">Text AAA</div>
+            <div v-else-if="count < 3">Text BBB</div>
+            <div v-else>Text CCC</div>
+        </div>
+    </div>
+
+    <button id="mybtn4">v-for</button>
+    <div id="mydiv4">
+        <span v-for="(ele, idx) in arr">ele:{{ ele }} / idx:{{ idx }} <br/></span>
+        <span v-for="(val, key, idx) in book" style="color: darkblue">book val:{{ val }} / key:{{ key }} / idx:{{ idx }} <br/></span>
+    </div>
+
+    <button id="mybtn5">生命週期</button>
+    <div id="mydiv5">
+        看console，一般掛在mount，那時候Data才出現 <br/>
+        <a href="https://book.vue.tw/CH1/1-7-lifecycle.html">src</a>
+    </div>
+   
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+    document.querySelector('#mybtn1').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                    return {
+                        message: 'ABC',
+                    }
+            },
+            computed: {
+                isValid() {
+                    return this.message.length <= 5;
+                },
+                msgStyle() {
+                    return {
+                        'border': this.isValid ? '' : 'red solid 2px',
+                        'color': this.isValid ? '' : 'red',
+                    }
+                }
+            }
+        }).mount('#mydiv1');
+    });
+
+    document.querySelector('#mybtn2').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    count: 1,
+                }
+            },
+            methods: {
+                plus() {
+                    this.count++;
+                }
+            }
+        }).mount('#mydiv2');
+    });
+
+
+    document.querySelector('#mybtn3').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    count: 0,
+                }
+            },
+            methods: {
+                plus() {
+                    this.count++;
+                }
+            }
+        }).mount('#mydiv3');
+    });
+
+    document.querySelector('#mybtn4').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    arr: ['aaa', 'bbb', 'ccc', 'ddd'],
+                    book: {
+                        title: 'abc',
+                        author: 'Kuro'
+                    }
+                }
+            },
+        }).mount('#mydiv4');
+    });
+
+    document.querySelector('#mybtn5').addEventListener('click', () => {
+        Vue.createApp({
+            data() {
+                return {
+                    arr: ['aaa', 'bbb', 'ccc', 'ddd'],
+                }
+            },
+            beforeCreate () {
+                console.log('beforeCreated');
+            },
+            created () {
+                console.log('created');
+            },
+            beforeMount () {
+                console.log('beforeMounted');
+            },
+            mounted () {
+                console.log('mounted');
+            },
+            unmounted () {
+                console.log('unmounted');
+            },
+        }).mount('#mydiv5');
+    });
+    </script>
+</body>
+</html>

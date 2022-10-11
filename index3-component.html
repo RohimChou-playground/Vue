@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div, button {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <button id="mybtn1">component</button>
+    <div id="mydiv1">
+        <div> parent {{ msg1 }} </div>
+        <comp-aaa></comp-aaa>
+        <comp-bbb></comp-bbb>
+        <comp-bbb></comp-bbb>
+    </div>
+
+    <button id="mybtn2">x-template</button>
+    <div id="mydiv2">
+        <div>
+            不想打在 template '' 字串裡的話可用 <br/> 
+            script text/x-template要在vue.createApp上面
+        </div>
+        <comp-ccc></comp-ccc>
+    </div>
+
+    <button id="mybtn3">props</button>
+    <div id="mydiv3">
+        <span> 重要 <br/></span>
+        {{ msg1 }}
+        <comp-ccc v-bind:parentmsg1="msg1"></comp-ccc>
+    </div>
+   
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="text/x-template" id="comp-ccc">
+        <div> {{ msg1 }} </div>
+    </script>
+    <script>
+        document.querySelector('#mybtn1').addEventListener('click', () => {
+            Vue.createApp({
+                components: {
+                    'comp-aaa': {
+                        template: '<div>Hello {{ msg1 }}</div>'
+                    },
+                    'comp-bbb': {
+                        template: '<div>Hello {{ msg2 }}</div>',
+                        data() {
+                            return {
+                                msg2: 'BBB'
+                            }
+                        }
+                    }
+                },
+                data() {
+                    return {
+                        msg1: '000',
+                    }
+                },
+                computed: {
+                    // isValid() {
+                    //     return this.message.length <= 5;
+                    // },
+                }
+            }).mount('#mydiv1');
+        });
+
+        document.querySelector('#mybtn2').addEventListener('click', () => {
+            Vue.createApp({
+                components: {
+                    'comp-ccc': {
+                        template: '#comp-ccc',
+                        data() {
+                            return {
+                                msg1: 'CCC',
+                            }
+                        },
+                    },
+                },
+                data() {
+                    return {
+                        msg0: '000',
+                    }
+                },
+                computed: {
+                    // isValid() {
+                    //     return this.message.length <= 5;
+                    // },
+                }
+            }).mount('#mydiv2');
+        });
+
+        document.querySelector('#mybtn3').addEventListener('click', () => {
+            Vue.createApp({
+                components: {
+                    'comp-ccc': {
+                        template: '<div> {{ msg1 }} / {{ parentmsg1 }}</div>',
+                        props: {
+                            parentmsg1: { 
+                                type: String, // 會幫忙型別檢查，如果有問題 console 就會提醒
+                                required: true, // 如果null console就會提醒
+                                default: 'abc', // 可以非空的話，可以用這個
+                            }
+                        },
+                        data() {
+                            return {
+                                msg1: '自己的message',
+                            }
+                        },
+                    },
+                },
+                data() {
+                    return {
+                        msg1: '父元件message',
+                    }
+                },
+                computed: {
+                    // isValid() {
+                    //     return this.message.length <= 5;
+                    // },
+                }
+            }).mount('#mydiv3');
+        });
+    </script>
+</body>
+</html>
