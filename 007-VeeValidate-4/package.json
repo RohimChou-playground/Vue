@@ -7,7 +7,8 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "@vee-validate/ruleㄙㄩㄣˉs": "^4.7.0",
+    "@vee-validate/i18n": "^4.7.0",
+    "@vee-validate/rules": "^4.7.0",
     "vee-validate": "^4.7.0",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5"
