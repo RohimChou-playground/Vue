@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import AllRules from '@vee-validate/rules'
 import { defineRule } from 'vee-validate'
@@ -17,8 +18,8 @@ configure({
   validateOnModelUpdate: false,
 });
 
-const mySubmit = () => {
-  console.log("AAAAAA");
+const mySubmit = (formValues) => {
+  console.log(formValues);
 }
 </script>
 
@@ -26,18 +27,19 @@ const mySubmit = () => {
   <main>
     <div id="div1">
       Form1
-      <Form @submit="mySubmit()">
-        <label for="username">UserName: </label>
-        <Field type="text" name="username" rules="required"></Field>
-        <ErrorMessage style="color:red" name="username"></ErrorMessage>
+      <Form v-slot="{ handleSubmit }" as="div">
+        <form @submit="handleSubmit($event, mySubmit)" >
+          <label for="username">UserName: </label>
+          <Field type="text" name="username" rules="required"></Field>
+          <ErrorMessage style="color:red" name="username"></ErrorMessage>
 
-        <label for="birthyear">BirthYear: </label>
-        <Field type="text" name="birthyear" v-slot="abc">
-          {{ debugger }}
-        </Field>
+          <label for="birthyear">BirthYear: </label>
+          <Field type="text" name="birthyear" v-slot="abc">
+          </Field>
 
-        <button id="btn1">this will submit</button>
-        <button id="btn2" type="button">this won't</button>
+          <button id="btn1">this will submit</button>
+          <button id="btn2" type="button">this won't</button>
+        </form>
       </Form>
     </div>
   </main>
