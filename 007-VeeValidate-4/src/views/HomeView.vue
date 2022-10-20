@@ -23,14 +23,19 @@ const mySubmit = (formValues) => {
   console.log(formValues);
 }
 
-const myForm = ref(null);
 const myInvalidSubmit = (formValues) => {
   console.log("myInvalidSubmit, focus on first error");
   console.log(formValues);
   const { errors, evt, results, values } = formValues;
 
-  // <form>
-  console.log(myForm.value);
+  const inputs = evt.target.querySelectorAll('input, select');
+  for (const input of inputs) {
+    if (errors[input.name] !== undefined) {
+      console.log(input.name);
+      input.focus();
+      return;
+    }
+  }
 }
 </script>
 
