@@ -5,16 +5,33 @@ let route = useRouter();
 
 // Note: Inside of a Vue instance, you have access to the router instance as $router. 
 // You can therefore call this.$router.push.
-function abc() {
+function test_default() {
   route.push({ path: '/test' });
+}
+
+function test_query() {
+  route.push({ path: '/test', query: { userName: 'John' } });
+}
+
+// 'path' cannot be used with params, params would be ignored
+// Changed on this version: https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22
+// 
+function test_params() {
+  route.push({ name: 'test', params: { userName: 'John' } });
+}
+
+function test_hist_state() {
+  route.push({ name: 'test', state: { userName: 'John' } });
 }
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <button @click="abc">Test</button>
+      <button @click="test_default">Test</button>
+      <button @click="test_query">Test With Query Url Params</button>
+      <button @click="test_params">Test With Params</button>
+      <button @click="test_hist_state">Test With Hitory State</button>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
@@ -26,6 +43,10 @@ function abc() {
 </template>
 
 <style scoped>
+button {
+  margin-right: 10px;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
