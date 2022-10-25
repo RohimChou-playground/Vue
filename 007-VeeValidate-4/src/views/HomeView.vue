@@ -10,10 +10,14 @@ Object.keys(AllRules).forEach(rule => {
   defineRule(rule, AllRules[rule]);
 });
 
-defineRule('positive', value => {
-        return value >= 1 ? true : '必須是正數';
-    },
-);
+defineRule('positive', (value, limits, event) => {
+  console.log(value, limits, rule);
+  if (value !== undefined) {
+    return value >= 1 ? true : '必須是正數';
+  } else {
+    return true;
+  }
+});
 
 configure({
   generateMessage: localize('zh_TW', {
@@ -63,7 +67,7 @@ const myInvalidSubmit = (formValues) => {
           <ErrorMessage style="color:red" name="username"></ErrorMessage>
 
           <label for="birthyear">BirthYear: </label>
-          <Field type="number" name="birthyear" rules="positive"></Field>
+          <Field type="number" name="birthyear" rules="positive:abc"></Field>
           <ErrorMessage style="color:red" name="birthyear"></ErrorMessage>
 
           <button id="btn1">this will submit</button>
