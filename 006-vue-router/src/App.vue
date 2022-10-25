@@ -1,19 +1,17 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import { useRouter } from 'vue-router'
 let route = useRouter();
-  // Note: Inside of a Vue instance, you have access to the router instance as $router. 
-  // You can therefore call this.$router.push.
-  function abc() {
-    route.push({ path: '/test' });
-  }
+
+// Note: Inside of a Vue instance, you have access to the router instance as $router. 
+// You can therefore call this.$router.push.
+function abc() {
+  route.push({ path: '/test' });
+}
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <button @click="abc">Test</button>
